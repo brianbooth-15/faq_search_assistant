@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ Chatbot</title>
+<style>
+  body { 
+    margin: 0; 
+    padding: 0; 
+    font-family: Arial, sans-serif; 
+    background-image: url('homepage.png'); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
+    height: 100vh;
+  }
+  
+  /* Chat widget container */
+  #chat-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+  }
+  
+  /* Chat toggle button */
+  #chat-toggle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgb(0, 137, 0);
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #chat-toggle:hover {
+    background: rgb(0, 100, 0);
+  }
+  
+  /* Chat container */
+  #chat-container {
+    width: 350px;
+    height: 500px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+  }
+  
+  #chat-container.open {
+    display: flex;
+  }
+  
+  /* Chat header */
+  #chat-header {
+    background: rgb(0, 137, 0);
+    color: white;
+    padding: 15px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  #close-chat {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  #messages {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+  
+  .message {
+    margin: 0.5rem 0;
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    max-width: 80%;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+  
+  .user {
+    background: rgb(0, 137, 0);
+    color: #fff;
+    align-self: flex-end;
+    margin-left: auto;
+  }
+  
+  .assistant {
+    background: #e4e4e4;
+    color: #000;
+    align-self: flex-start;
+  }
+  
+  #input-form {
+    display: flex;
+    border-top: 1px solid #ccc;
+  }
+  
+  #question {
+    flex: 1;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 0 0 0 10px;
+  }
+  
+  #send-btn {
+    background: rgb(0, 137, 0);
+    color: #fff;
+    border: none;
+    padding: 0 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 0 0 10px 0;
+  }
+  
+  #send-btn:hover {
+    background: rgb(0, 100, 0);
+  }
+</style>
+</head>
+<body>
+
+<div id="chat-widget">
+  <button id="chat-toggle">💬</button>
+  
+  <div id="chat-container">
+    <div id="chat-header">
+      <span>FAQ Assistant</span>
+      <button id="close-chat">×</button>
+    </div>
+    
+    <div id="messages"></div>
+    
+    <form id="input-form">
+      <input type="text" id="question" placeholder="Ask a question..." autocomplete="off" />
+      <button type="submit" id="send-btn">Send</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const messagesEl = document.getElementById('messages');
+const inputForm = document.getElementById('input-form');
+const questionInput = document.getElementById('question');
+const chatToggle = document.getElementById('chat-toggle');
+const chatContainer = document.getElementById('chat-container');
+const closeChat = document.getElementById('close-chat');
+
+// Toggle chat visibility
+chatToggle.addEventListener('click', () => {
+  chatContainer.classList.add('open');
+  questionInput.focus();
+});
+
+closeChat.addEventListener('click', () => {
+  chatContainer.classList.remove('open');
+});
+
+function renderMarkdown(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')  // **bold**
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')              // *italic*
+    .replace(/\n/g, '<br>');                           // line breaks
+}
+
+function addMessage(content, sender) {
+  const msg = document.createElement('div');
+  msg.classList.add('message', sender);
+  
+  if (sender === 'user') {
+    msg.textContent = content;
+  } else {
+    msg.innerHTML = renderMarkdown(linkify(content));
+  }
+  
+  messagesEl.appendChild(msg);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function linkify(text) {
+  const urlPattern = /(https?:\/\/[^\s]+)/g;
+  return text.replace(urlPattern, '<a href="$1" target="_blank">$1</a>');
+}
+
+inputForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const question = questionInput.value.trim();
+  if (!question) return;
+  addMessage(question, 'user');
+  questionInput.value = '';
+
+  addMessage('...', 'assistant');
+
+  try {
+    const res = await fetch('http://127.0.0.1:8000/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question })
+    });
+    const data = await res.json();
+    messagesEl.lastChild.innerHTML = renderMarkdown(linkify(data.answer));
+  } catch (err) {
+    messagesEl.lastChild.innerHTML = 'Error contacting backend.';
+    console.error(err);
+  }
+});
+</script>
+
+</body>
+</html>
