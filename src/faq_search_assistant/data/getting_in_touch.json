@@ -1,0 +1,92 @@
+[
+  {
+    "category": "Contact",
+    "question": "How can I contact customer service online?",
+    "answer": "Use the Contact Us form at https://www.postcodelottery.co.uk/about-us/contact-us",
+    "url": "https://www.postcodelottery.co.uk/support/faq/getting-in-touch"
+  },
+  {
+    "category": "Getting In Touch",
+    "question": "What is People's Postcode Lottery's phone number?",
+    "answer": "You can call our freephone number 0808 109 8765 for help with sign-ups, account changes, or any queries.",
+    "url": "https://www.postcodelottery.co.uk/support/faq/getting-in-touch"
+  },
+  {
+    "category": "Getting In Touch",
+    "question": "What is the address for People's Postcode Lottery?",
+    "answer": "Trading address: People's Postcode Lottery, 28 Charlotte Square, Edinburgh, EH2 4ET, UK. Registered office: Postcode Lottery Ltd, c/o BDO LLP, Two Snowhill, 7th Floor, Birmingham, B4 6GA, UK.",
+    "url": "https://www.postcodelottery.co.uk/support/faq/getting-in-touch"
+  },
+  {
+    "category": "Getting In Touch",
+    "question": "Why would People's Postcode Lottery call me?",
+    "answer": "We might call to advise a prize win, resolve a subscription or payment issue, provide updates, or offer assistance if you started signing up online.",
+    "url": "https://www.postcodelottery.co.uk/support/faq/getting-in-touch"
+  },
+  {
+    "category": "Getting In Touch",
+    "question": "Why has People's Postcode Lottery emailed me about finishing my sign up?",
+    "answer": "If you started a sign-up but didn’t complete it, we may email a reminder and offer help, unless you opted out of marketing.",
+    "url": "https://www.postcodelottery.co.uk/support/faq/getting-in-touch"
+  },
+  {
+    "category": "Getting In Touch",
+    "question": "How can I raise a complaint with People's Postcode Lottery?",
+    "answer": "Follow the complaints procedure in Section 10 of our [Terms and Conditions](https://www.postcodelottery.co.uk/policies/terms-and-conditions) or see 'How does People's Postcode Lottery handle complaints?'. Full procedure available on request.",
+    "url": "https://www.postcodelottery.co.uk/support/faq/getting-in-touch"
+  },
+  {
+    "category": "Complaints",
+    "question": "How can I raise a complaint with People's Postcode Lottery?",
+    "answer": "You can raise a complaint by calling 0808 109 8765, emailing info@postcodelottery.co.uk, or writing/attending in person at 28 Charlotte Square, Edinburgh, EH2 4ET.",
+    "url": "https://www.postcodelottery.co.uk/support/faq/complaints"
+  },
+  {
+    "category": "Complaints",
+    "question": "What is the timeframe to raise a complaint?",
+    "answer": "Complaints must be raised within six months from the date of the relevant draw or incident.",
+    "url": "https://www.postcodelottery.co.uk/support/faq/complaints"
+  },
+  {
+    "category": "Complaints",
+    "question": "What happens if my complaint isn’t resolved quickly?",
+    "answer": "If not resolved within two working days, it enters the Formal Complaints Procedure with staged investigations.",
+    "url": "https://www.postcodelottery.co.uk/support/faq/complaints"
+  },
+  {
+    "category": "Complaints",
+    "question": "What are the stages of the Formal Complaints Procedure?",
+    "answer": "Stage 1: Staff investigation and response within 5 working days. Stage 2: Escalation to senior staff with aim to resolve within 20 working days. Stage 3: Escalation to Managing Director or Finance Director with a 5-day response target.",
+    "url": "https://www.postcodelottery.co.uk/support/faq/complaints"
+  },
+  {
+    "category": "Complaints",
+    "question": "What is Alternative Dispute Resolution (ADR)?",
+    "answer": "If unsatisfied after Stage 3 or eight weeks, you can request your complaint be referred to ADR. PPL covers all costs and seeks your consent before referral.",
+    "url": "https://www.postcodelottery.co.uk/support/faq/complaints"
+  },
+  {
+    "category": "Complaints",
+    "question": "Who provides Alternative Dispute Resolution?",
+    "answer": "The Independent Betting Adjudication Service (IBAS) at PO Box 62639, London EC3P 3AS, T: 020 7347 5883, E: adjudication@ibas-uk.co.uk, W: www.ibas-uk.com.",
+    "url": "https://www.postcodelottery.co.uk/support/faq/complaints"
+  },
+  {
+    "category": "Complaints",
+    "question": "What is the 'stop the clock' provision in complaints?",
+    "answer": "If you don’t respond to a request for information within 7 days, the eight-week timeframe stops until you provide the info, then the clock restarts.",
+    "url": "https://www.postcodelottery.co.uk/support/faq/complaints"
+  },
+  {
+    "category": "Responsible Play",
+    "question": "How can I self-exclude from playing People's Postcode Lottery?",
+    "answer": "If gambling is a concern, you can self-exclude to prevent participation in lotteries operated by People's Postcode Lottery. Find out more on how to self-exclude on our website.",
+    "url": "https://www.postcodelottery.co.uk/policies/self-exclusion"
+  },
+  {
+    "category": "Getting In Touch",
+    "question": "Where can I get the terms and conditions for People's Postcode Lottery?",
+    "answer": "You can find the terms and conditions on our website at https://www.postcodelottery.co.uk/policies/terms-and-conditions.",
+    "url": "https://www.postcodelottery.co.uk/policies/terms-and-conditions"
+  }
+]

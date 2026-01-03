@@ -30,13 +30,34 @@ class QuestionRequest(BaseModel):
     question: str
 
 # -----------------------------
-# Load FAQs
+# Load FAQs from all category files
 # -----------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-FAQ_FILE = os.path.join(BASE_DIR, "data", "faqs.json")
+DATA_DIR = os.path.join(BASE_DIR, "data")
 
-with open(FAQ_FILE, "r") as f:
-    faqs = json.load(f)
+# Load all FAQ files and combine them
+faqs = []
+faq_files = [
+    "winning_cash_faqs.json",
+    "draws_and_payments_faqs.json",
+    "getting_in_touch.json",
+    "signing_up_faqs.json", 
+    "lottery_odds_faqs.json",
+    "making_changes_faqs.json",
+    "reviews_faqs.json",
+    "refer_a_friend_faqs.json",
+    "charity_faqs.json",
+    "prizes_faqs.json"
+]
+
+for faq_file in faq_files:
+    file_path = os.path.join(DATA_DIR, faq_file)
+    if os.path.exists(file_path):
+        with open(file_path, "r") as f:
+            category_faqs = json.load(f)
+            faqs.extend(category_faqs)
+
+print(f"Loaded {len(faqs)} FAQs from {len(faq_files)} category files")
 
 # -----------------------------
 # Load embedding model
@@ -59,21 +80,19 @@ def clean_response(response: str) -> str:
     """
     import re
     
-    # Find the final answer after "...done Answer:" or just "Answer:"
-    answer_match = re.search(r'(?:.*?done\s+)?Answer:\s*(.*)', response, re.DOTALL | re.IGNORECASE)
+    # Remove everything before "Answer:" including thinking patterns
+    answer_match = re.search(r'Answer:\s*(.*)', response, re.DOTALL | re.IGNORECASE)
     if answer_match:
         cleaned = answer_match.group(1).strip()
     else:
-        # If no "Answer:" found, remove everything before the last substantial sentence
-        lines = response.split('\n')
-        substantial_lines = [line.strip() for line in lines if len(line.strip()) > 20 and not any(word in line.lower() for word in ['okay', 'let me', 'looking', 'based on', 'according to', 'i need'])]
+        # If no "Answer:" found, take the response as-is but remove thinking patterns
+        cleaned = re.sub(r'.*?(?:done thinking|done|thinking).*?(?=\n|$)', '', response, flags=re.IGNORECASE | re.DOTALL)
+        cleaned = cleaned.strip()
         
-        if substantial_lines:
-            cleaned = substantial_lines[-1]
-        else:
+        if not cleaned or len(cleaned) < 10:
             return "I don't have specific information about that."
     
-    # Keep markdown formatting - just clean up extra whitespace
+    # Clean up extra whitespace but keep markdown formatting
     cleaned = re.sub(r'\n\s*\n+', '\n\n', cleaned)
     
     return cleaned
@@ -208,9 +227,13 @@ United Kingdom"""
             for idx in top_idxs
         ])
         
+        # Get URLs from matched FAQs - only show the most relevant one
+        most_relevant_url = faqs[top_idxs[0]]['url']
+        unique_urls = [most_relevant_url]
+        
         prompt = f"""Answer this question: {user_question}
 
-Extract only the relevant information from these FAQs to answer the question directly and concisely. Use **bold** for important details like phone numbers, addresses, and key information:
+Extract only the relevant information from these FAQs to answer the question directly and concisely:
 
 {context}
 
@@ -221,6 +244,10 @@ Answer:"""
         # Clean up any thinking artifacts
         ai_response = clean_response(ai_response)
         
+        # Add URL for more information
+        if unique_urls:
+            ai_response += f"\n\n**For more information:** {unique_urls[0]}"
+        
         return {"answer": ai_response, "format": "markdown"}
 
     # High similarity: also process through AI for better responses
@@ -228,7 +255,7 @@ Answer:"""
     
     prompt = f"""Answer this question: {user_question}
 
-Extract only the relevant information from this FAQ to answer the question directly and concisely. Use **bold** for important details like phone numbers, addresses, and key information:
+Extract only the relevant information from this FAQ to answer the question directly and concisely:
 
 {context}
 
@@ -236,5 +263,9 @@ Answer:"""
     
     ai_response = run_ollama(prompt)
     ai_response = clean_response(ai_response)
+    
+    # Add URL for more information
+    if faqs[top_idx]['url']:
+        ai_response += f"\n\n**For more information:** {faqs[top_idx]['url']}"
     
     return {"answer": ai_response, "format": "markdown"}
